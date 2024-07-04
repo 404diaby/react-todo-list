@@ -36,3 +36,22 @@
     transform: rotate(360deg);
   }
 }
+
+/* 
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+ }
+ .todo-item p {
+  color: #888;
+  text-decoration: line-through;
+ } */
+ body{
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+ }
