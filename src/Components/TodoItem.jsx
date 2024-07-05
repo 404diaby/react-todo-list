@@ -35,22 +35,22 @@ export default TodoItem; */
  * @example
  * <TodoItem todo={{ id: 1, text: 'Buy milk', completed: false }} deleteTask={(id) => console.log(`Deleted todo ${id}`)} toggleCompleted={(id) => console.log(`Toggled todo ${id}`)} />
  */
-function TodoItem({ todo, deleteTask, toggleCompleted }) {
+function TodoItem({ todo, handleDeleteTask, handleToggleCompleted }) {
 
 
-console.log(todo)
-    return(
-        <div className="todo-item p-3 m-3 d-flex gap-3 justify-content-between align-items-center border ">
-    <input type="checkbox" checked={todo.completed} 
-    onChange={() =>{
-        toggleCompleted(todo.id)
-    }} />
-   <p key={todo.id} >{todo.text}</p> 
-   <button type="button" onClick={() => deleteTask(todo.id)}>DEL</button>
-   </div>
+    return (
+        <div className="todo-item w-100 p-2 mb-3 d-flex gap-3 justify-content-between align-items-center rounded bg-light ">
+            <input
+                type="checkbox"
+                checked={todo.completed}
+                onChange={() => {
+                    handleToggleCompleted(todo.id)
+                }} />
+            <p key={todo.id} style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}> {todo.text} </p>
+            <button type="button" onClick={() => handleDeleteTask(todo.id)}>DEL</button>
+        </div>
     )
-    
-}
 
+}
 
 export default TodoItem
