@@ -83,7 +83,9 @@ Implement User Authentication: Add a login feature to allow users to create acco
 Enhance Todo Item Management: Add features to edit and reorder todo items. You could also implement a priority system, where users can assign different priorities to their tasks.
 Introduce Due Dates and Reminders: Allow users to set due dates and reminders for their todo items. This could be achieved by integrating a calendar library like FullCalendar or React-Calendar.
 Improve User Experience: Enhance the user interface by adding animations, transitions, and responsive design. You could also add a dark mode or customizable themes.
-Add Filtering and Sorting: Implement filtering and sorting features to help users quickly find specific todo items. This could be achieved by adding dropdown menus or search bars.
+
+DONE: Add Filtering and Sorting: Implement filtering and sorting features to help users quickly find specific todo items. This could be achieved by adding dropdown menus or search bars.
+
 Integrate with Other Services: Allow users to integrate their todo lists with other services like Google Calendar, Trello, or Slack. This could be achieved by using APIs or webhooks.
 Implement Offline Support: Add offline support to allow users to access their todo lists even when they don't have an internet connection. You could use libraries like Redux or React Query to handle offline data storage.
 Add Collaborative Features: Allow multiple users to collaborate on a single todo list. This could be achieved by implementing real-time updates and user permissions.

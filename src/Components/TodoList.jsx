@@ -22,10 +22,13 @@ function TodoList() {
    * @type {Array<TodoItem>}
    */
     const [todos, setTodos] = useState([
-        { id: 1, text: "Learn React", completed: true },
-        { id: 2, text: "Learn React Native", completed: false }
+        { id: 1, text: "Learn React", completed: true, editing: false },
+        { id: 2, text: "Learn React Native", completed: false, editing: false }
     ])
-
+    /* TODO */
+    const [filterText, setFilterText] = useState('');
+    const [sortOption, setSortOption] = useState('none');
+    const [editedTaskText, setEditedTaskText] = useState('');
     /**
   * Adds a new task to the list of todo items.
   *
@@ -35,7 +38,8 @@ function TodoList() {
         const newTask = {
             id: Date.now(),
             text: newTaskInputValue,
-            completed: false
+            completed: false,
+            editing: false
         }
         setTodos([...todos, newTask])
         setNewTaskInputValue("")
@@ -63,10 +67,70 @@ function TodoList() {
                 return todo;
             }
         }))
+
     }
+    /* tofDO */
+
+    const filteredTodos = (todos, filterText) => {
+        return todos.filter((todo) => {
+            return todo.text.toLowerCase().includes(filterText.toLowerCase());
+        });
+    };
+    const sortedTodos = (todos, sortOption) => {
+        switch (sortOption) {
+            case 'completed':
+                return todos.sort((a, b) => a.completed - b.completed);
+            case 'text':
+                return todos.sort((a, b) => a.text.localeCompare(b.text));
+            default:
+                return todos;
+        }
+    };
+    function handleEditTask(editedTaskText, id) {
+
+        const task = todos.find((todo) => todo.id === id);
+        if (!task.completed) {
+            setTodos(todos.map(todo => {
+                if (todo.id === id) {
+                    if (task.editing) {
+                        if (editedTaskText === '') {
+                            return { ...todo, text: task.text, editing: !todo.editing };
+
+                        } else {
+                            return { ...todo, text: editedTaskText, editing: !todo.editing };
+                        }
+
+
+                    } else {
+                        return { ...todo, editing: !todo.editing };
+                    }
+
+
+                } else {
+                    return todo;
+                }
+            }))
+        } else {
+            alert("Task is completed")
+        }
+    }
+
 
     return (
         <div className="todo-list container   p-4 rounded-4" style={{ backgroundColor: "#ECEDF6", }}>
+            <div>
+                <input
+                    type="text"
+                    value={filterText}
+                    placeholder="Filter tasks"
+                    onChange={(e) => setFilterText(e.target.value)}
+                />
+                <select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+                    <option value="none">None</option>
+                    <option value="completed">Completed</option>
+                    <option value="text">Text</option>
+                </select>
+            </div>
             <input
                 type="text"
                 className='mb-4'
@@ -78,12 +142,15 @@ function TodoList() {
             <button type="button" onClick={() => {
                 handleAddTask(newTaskInputValue)
             }}> ADD</button>
-            {todos.map(todo => (
+            {sortedTodos(filteredTodos(todos, filterText), sortOption).map((todo) => (
                 <TodoItem
                     key={todo.id}
                     todo={todo}
                     handleDeleteTask={handleDeleteTask}
-                    handleToggleCompleted={handleToggleCompleted} />
+                    handleToggleCompleted={handleToggleCompleted}
+                    handleEditTask={handleEditTask}
+
+                />
             ))}
         </div>
     )
