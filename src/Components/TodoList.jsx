@@ -9,74 +9,139 @@ import TodoItem from "./TodoItem"
  *
  * @returns {React.ReactElement} A React element representing the TodoList component.
  */
-function TodoList() {
+const TodoList = () => {
+
     /**
-   * The text of the new task to be added.
-   *
-   * @type {string}
+   * The current value of the new task input field.
    */
-    const [newTaskInputValue, setNewTaskInputValue] = useState("")
+    const [newTaskInputValue, setNewTaskInputValue] = useState('')
+
+
     /**
    * The list of todo items.
-   *
-   * @type {Array<TodoItem>}
+   * * @type {Array} - Array of object :  example of objet : todo =>  { id: 1, text: "Learn React", priority: "Low", completed: true, editing: false}
    */
     const [todos, setTodos] = useState([
         { id: 1, text: "Learn React", priority: "Low", completed: true, editing: false },
         { id: 2, text: "Learn React Native", priority: "High", completed: false, editing: false }
     ])
-    /* TODO */
+
+    /**
+   * The filter text used to filter the todo items.
+   */
     const [filterText, setFilterText] = useState('');
+
+    /**
+   * The sort option used to sort the todo items.
+   */
     const [sortOption, setSortOption] = useState('none');
 
-    /**
-  * Adds a new task to the list of todo items.
-  *
-  * @param {string} newTaskInputValue -  The text of the new task.
-  */
-    function handleAddTask(newTaskInputValue) {
-        const newTask = {
-            id: Date.now(),
-            text: newTaskInputValue,
-            priority: "Low",
-            completed: false,
-            editing: false
-        }
-        setTodos([...todos, newTask])
-        setNewTaskInputValue("")
-    }
-    /**
-       * Deletes a todo item from the list.
-       *
-       * @param {number} id - The ID of the todo item to be deleted.
-       */
-    function handleDeleteTask(id) {
-        setTodos(todos.filter(todo => todo.id !== id))
-    }
-
 
     /**
-     * Toggles the completion status of a todo item.
+     * Adds a new task to the list of todo items.
      *
-     * @param {number} id -  The ID of the todo item to be toggled.
+     * @param {string} newTaskInputValue - The text of the new task.
+     * @example handleAddTask("Learn JavaScript")
      */
-    function handleToggleCompleted(id) {
-        setTodos(todos.map(todo => {
-            if (todo.id === id) {
-                return { ...todo, completed: !todo.completed };
-            } else {
-                return todo;
+    const handleAddTask = (newTaskInputValue) => {
+        try {
+            if (newTaskInputValue.trim() === '') {
+                throw new Error('Task cannot be empty');
             }
-        }))
+            const newTask = {
+                id: Date.now(),
+                text: newTaskInputValue,
+                priority: 'Low',
+                completed: false,
+                editing: false,
+            };
+            setTodos([...todos, newTask]);
+            setNewTaskInputValue('');
+        } catch (error) {
+            alert(error.message);
+            throw new Error('Erreur lors de l\'ajout d\'une tâche : ' + error.message);
+        }
+    };
 
-    }
-    /* tofDO */
 
+    /**
+   * Deletes a todo item from the list.
+   *
+   * @param {number} id - The ID of the todo item to be deleted.
+   * @example handleDeleteTask(1)
+   */
+    const handleDeleteTask = (id) => {
+        const task = todos.find((todo) => todo.id === id);
+        try {
+            if (task.completed) {
+                throw new Error('Task is completed');
+            }
+            const taskIndex = todos.findIndex((todo) => todo.id === id);
+            if (taskIndex === -1) {
+                throw new Error('Task not found');
+            }
+            setTodos(todos.filter((todo) => todo.id !== id));
+        } catch (error) {
+            alert(error.message);
+            /*  throw new Error('Erreur lors de la suppression d\'une tâche : ' + error.message); */
+        }
+    };
+
+
+
+    /**
+   * Toggles the completion status of a todo item.
+   *
+   * @param {number} id - The ID of the todo item to be toggled.
+   * @example handleToggleCompleted(1)
+   */
+    const handleToggleCompleted = (id) => {
+        try {
+            const taskIndex = todos.findIndex((todo) => todo.id === id);
+            if (taskIndex === -1) {
+                throw new Error('Task not found');
+            }
+            setTodos(
+                todos.map((todo) => {
+                    if (todo.id === id) {
+                        return { ...todo, completed: !todo.completed };
+                    } else {
+                        return todo;
+                    }
+                }),
+            );
+        } catch (error) {
+            alert(error.message);
+            throw new Error('Erreur du changement de la checkbox d\'une tâche : ' + error.message);
+        }
+    };
+
+
+
+    /**
+   * Filters the todo items based on the filter text.
+   *
+   * @param {array} todos - The list of todo items.
+   * @param {string} filterText - The filter text.
+   * @returns {array} The filtered list of todo items.
+   * @example filteredTodos(todos, "Learn")
+   */
     const filteredTodos = (todos, filterText) => {
         return todos.filter((todo) => {
             return todo.text.toLowerCase().includes(filterText.toLowerCase());
         });
     };
+
+
+
+    /**
+   * Sorts the todo items based on the sort option.
+   *
+   * @param {array} todos - The list of todo items.
+   * @param {string} sortOption - The sort option.
+   * @returns {array} The sorted list of todo items.
+   * @example sortedTodos(todos, "completed")
+   */
     const sortedTodos = (todos, sortOption) => {
         switch (sortOption) {
             case 'completed':
@@ -87,59 +152,52 @@ function TodoList() {
                 return todos;
         }
     };
-    /* function handleEditTask(id, newTaskText) {
 
-        const task = todos.find((todo) => todo.id === id);
-        if (!task.completed) {
-            setTodos(todos.map(todo => {
-                if (todo.id === id) {
-                    if (task.editing) {
+    /**
+   * Edits a todo item.
+   *
+   * @param {number} id - The ID of the todo item to be edited.
+   * @param {string} newValue - The new value of the todo item.
+   * @param {string} field - The field of the todo item to be edited.
+   * @example handleEditTask(1, "Learn React", "text")
+   */
+    const handleEditTask = (id, newValue, field) => {
+        try {
 
-                        
-                        if (newTaskText === '') {
-                            return { ...todo, text: task.text, editing: !todo.editing };
+            const task = todos.find((todo) => todo.id === id);
+            if (!task) {
+                throw new Error('Task not found');
+            }
+            if (task.completed) {
+                throw new Error('Task is completed');
+            }
+            if (task.editing) {
 
-                        } else {
-                            return { ...todo, text: newTaskText, editing: !todo.editing };
+                if (field === 'text' && newValue.trim() === '') {
+                    throw new Error('Task text cannot be empty');
+                }
+            }
+            setTodos(
+                todos.map((todo) => {
+                    if (todo.id === id) {
+                        if (field === 'text') {
+                            return { ...todo, [field]: newValue, editing: !todo.editing };
                         }
-
-
+                        return { ...todo, [field]: newValue };
                     } else {
-                        return { ...todo, editing: !todo.editing };
+                        return todo;
                     }
-
-
-                } else {
-                    return todo;
-                }
-            }))
-        } else {
-            alert("Task is completed")
+                }),
+            );
+        } catch (error) {
+            alert(error.message);
+            throw new Error('Erreur lors de l\'edition d\'une tâche : ' + error.message);
         }
-    } */
-    function handleEditTask(id, newValue, field) {
-        const task = todos.find((todo) => todo.id === id);
-
-        if (!task.completed) {
-            setTodos(todos.map((todo) => {
-                if (todo.id === id) {
-                    if (field == "text") {
-                        return { ...todo, [field]: newValue, editing: !todo.editing };
-                    }
-                    return { ...todo, [field]: newValue };
-
-                } else {
-                    return todo;
-                }
-            }));
-        } else {
-            alert("Task is completed")
-            console.log(todos)
-        }
-    }
+    };
 
     return (
-        <div className="todo-list container   p-4 rounded-4" style={{ backgroundColor: "#ECEDF6", }}>
+        <div className="todo-list container-md   p-4 rounded-4" style={{ backgroundColor: "#ECEDF6", }}>
+            <h1>TodoList</h1>
             <div>
                 <input
                     type="text"
@@ -173,17 +231,12 @@ function TodoList() {
                     handleEditTask={handleEditTask}
 
                 />
+
             ))}
         </div>
     )
 
 }
-/***
- * TODO
- * chaine vide non accepte
- * 
- */
-
 
 
 export default TodoList

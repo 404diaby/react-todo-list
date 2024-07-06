@@ -1,30 +1,14 @@
-/* import React from 'react';
-import TodoList from './Components/TodoList';
-
-function App() {
-  return (
-  <div className="App">
-  <TodoList />
-  </div>
-  ); 
- }
- export default App; */
-
-import "../src/App.css" 
 import React from 'react';
-import TodoList from "./Components/TodoList"
+import TodoList from './Components/TodoList';
+import './App.css'
 
 
- function App() {
-
-
-
-  return(
+const App = () => {
+  return (
+    
     <TodoList />
-  )
-  
+    
+  );
+};
 
- }
-
-
- export default App
+export default App;
