@@ -80,16 +80,22 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 Implement User Authentication: Add a login feature to allow users to create accounts and save their todo lists. You can use libraries like Firebase or Auth0 to handle authentication.
 
-Enhance Todo Item Management: Add features to edit and reorder todo items. You could also implement a priority system, where users can assign different priorities to their tasks.
+DONE : Enhance Todo Item Management: Add features to edit and reorder todo items. You could also implement a priority system, where users can assign different priorities to their tasks.
+
 Introduce Due Dates and Reminders: Allow users to set due dates and reminders for their todo items. This could be achieved by integrating a calendar library like FullCalendar or React-Calendar.
+
 Improve User Experience: Enhance the user interface by adding animations, transitions, and responsive design. You could also add a dark mode or customizable themes.
 
 DONE: Add Filtering and Sorting: Implement filtering and sorting features to help users quickly find specific todo items. This could be achieved by adding dropdown menus or search bars.
 
 Integrate with Other Services: Allow users to integrate their todo lists with other services like Google Calendar, Trello, or Slack. This could be achieved by using APIs or webhooks.
+
 Implement Offline Support: Add offline support to allow users to access their todo lists even when they don't have an internet connection. You could use libraries like Redux or React Query to handle offline data storage.
+
 Add Collaborative Features: Allow multiple users to collaborate on a single todo list. This could be achieved by implementing real-time updates and user permissions.
+
 Enhance Error Handling: Improve error handling by adding try-catch blocks and error messages. This will help users understand what went wrong and how to fix it.
+
 Write Unit Tests and Integration Tests: Write unit tests and integration tests to ensure that your code is working as expected. This will help you catch bugs and improve the overall quality of your code.
 These are just a few ideas to get you started. Remember to prioritize features based on user needs and feedback. Good luck with your project!
 

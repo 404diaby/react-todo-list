@@ -38,7 +38,9 @@ import { useState } from "react";
  */
 function TodoItem({ todo, handleDeleteTask, handleToggleCompleted, handleEditTask }) {
     /* todo */
-    const [editedTaskText, setEditedTaskText] = useState('');
+    const [editedTaskText, setEditedTaskText] = useState(todo.text);
+    const [priorityTask, setPriorityTask] = useState(todo.priority);
+
 
     return (
         <div className={todo.editing ?
@@ -56,16 +58,25 @@ function TodoItem({ todo, handleDeleteTask, handleToggleCompleted, handleEditTas
             {
                 todo.editing ? <input type="text"
                     value={editedTaskText}
+                    onChange={(e) => setEditedTaskText(e.target.value)} />
 
-                    onChange={(e) => setEditedTaskText(e.target.value)} /> : <p key={todo.id} style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}> {todo.text} </p>
+
+                    : <p key={todo.id} style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}> {todo.text} </p>
+
+
             }
 
-            <button type="button" onClick={() => handleEditTask(editedTaskText, todo.id)}>
+            <button type="button" onClick={() => handleEditTask(todo.id, editedTaskText, "text")}>
                 {
                     todo.editing ? "SAV" : "EDI"
                 }
             </button>
             <button type="button" onClick={() => handleDeleteTask(todo.id)}>DEL</button>
+            <select value={todo.priority} onChange={(e) => handleEditTask(todo.id, e.target.value, "priority")}>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
         </div >
     )
 

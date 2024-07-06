@@ -22,13 +22,13 @@ function TodoList() {
    * @type {Array<TodoItem>}
    */
     const [todos, setTodos] = useState([
-        { id: 1, text: "Learn React", completed: true, editing: false },
-        { id: 2, text: "Learn React Native", completed: false, editing: false }
+        { id: 1, text: "Learn React", priority: "Low", completed: true, editing: false },
+        { id: 2, text: "Learn React Native", priority: "High", completed: false, editing: false }
     ])
     /* TODO */
     const [filterText, setFilterText] = useState('');
     const [sortOption, setSortOption] = useState('none');
-    const [editedTaskText, setEditedTaskText] = useState('');
+
     /**
   * Adds a new task to the list of todo items.
   *
@@ -38,6 +38,7 @@ function TodoList() {
         const newTask = {
             id: Date.now(),
             text: newTaskInputValue,
+            priority: "Low",
             completed: false,
             editing: false
         }
@@ -86,18 +87,20 @@ function TodoList() {
                 return todos;
         }
     };
-    function handleEditTask(editedTaskText, id) {
+    /* function handleEditTask(id, newTaskText) {
 
         const task = todos.find((todo) => todo.id === id);
         if (!task.completed) {
             setTodos(todos.map(todo => {
                 if (todo.id === id) {
                     if (task.editing) {
-                        if (editedTaskText === '') {
+
+                        
+                        if (newTaskText === '') {
                             return { ...todo, text: task.text, editing: !todo.editing };
 
                         } else {
-                            return { ...todo, text: editedTaskText, editing: !todo.editing };
+                            return { ...todo, text: newTaskText, editing: !todo.editing };
                         }
 
 
@@ -113,8 +116,27 @@ function TodoList() {
         } else {
             alert("Task is completed")
         }
-    }
+    } */
+    function handleEditTask(id, newValue, field) {
+        const task = todos.find((todo) => todo.id === id);
 
+        if (!task.completed) {
+            setTodos(todos.map((todo) => {
+                if (todo.id === id) {
+                    if (field == "text") {
+                        return { ...todo, [field]: newValue, editing: !todo.editing };
+                    }
+                    return { ...todo, [field]: newValue };
+
+                } else {
+                    return todo;
+                }
+            }));
+        } else {
+            alert("Task is completed")
+            console.log(todos)
+        }
+    }
 
     return (
         <div className="todo-list container   p-4 rounded-4" style={{ backgroundColor: "#ECEDF6", }}>
