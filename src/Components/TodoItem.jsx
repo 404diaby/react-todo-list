@@ -1,6 +1,12 @@
 import React from "react";
 import { useState } from "react";
 import Select from 'react-select';
+import { BsBodyText } from "react-icons/bs";
+import { MdDelete, MdEdit } from "react-icons/md";
+import { FaSave } from "react-icons/fa";
+
+import ReactMarkdown from 'react-markdown';
+
 
 
 
@@ -22,13 +28,16 @@ import Select from 'react-select';
  *   handleEditTask={(id, value, field) => console.log(`Edited todo ${id} ${field} to ${value}`)} 
  * />
  */
-const TodoItem = ({ todo, handleDeleteTask, handleToggleCompleted, handleEditTask }) => {
+const TodoItem = ({ todo, handleDeleteTask, handleToggleCompleted, handleEdit }) => {
 
     /**
  * State variable to store the edited task text.
  *
  */
-    const [editedTaskText, setEditedTaskText] = useState('');
+    const [editedTitleTask, setEditedTitleTask] = useState(todo.title);
+    const [editedBodyTask, setEditedBodyTask] = useState(todo.body);
+
+    const [isDisabled, setIsDisabled] = useState(todo.completed);
 
     /**
  * Handles the edit action for a todo task.
@@ -45,8 +54,10 @@ const TodoItem = ({ todo, handleDeleteTask, handleToggleCompleted, handleEditTas
  * handleEdit(); // Calls handleEditTask(1, 'Updated task text', 'text')
  * ```
  */
-    const handleEdit = () => {
-        handleEditTask(todo.id, editedTaskText, "text");
+    const handleEditTask = () => {
+
+        handleEdit(todo.id, editedBodyTask, "body");
+        handleEdit(todo.id, editedTitleTask, "title");
     };
 
 
@@ -79,45 +90,80 @@ const TodoItem = ({ todo, handleDeleteTask, handleToggleCompleted, handleEditTas
 
 
 
+
     return (
-        <div className={todo.editing ?
-            "todo-item w-100 p-2 mb-3 d-flex gap-3 justify-content-between align-items-center rounded bg-light border border-warning " : "todo-item w-100 p-2 mb-3 d-flex gap-3 justify-content-between align-items-center rounded bg-light"
+        <div key={todo.id} className={todo.editing ?
+            "  todo-item  p-2   rounded bg-light border border-3 border-warning d-flex flex-column gap-3" : "d-flex flex-column gap-2 todo-item  p-2   rounded bg-light"
 
-        } >
-            < input
-                type="checkbox"
-                checked={todo.completed}
-                onChange={() => {
-                    handleToggleCompleted(todo.id)
-                }
-                } />
-
-            {
-                todo.editing ? (
-                    <textarea
-                        value={editedTaskText}
-                        onChange={(e) => setEditedTaskText(e.target.value)}
-                        rows={1}
-                    />
-                ) : (
-                    <p key={todo.id} style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}> {todo.text} </p>
-                )
-
-            }
-
-            <button type="button" onClick={handleEdit}>
+        } style={{ width: '500px', minHeight: '300px' }} >
+            <div className="input-group">
+                <span className="input-group-text">
+                    < input
+                        type="checkbox"
+                        checked={todo.completed}
+                        disabled={todo.editing}
+                        onChange={() => {
+                            console.table(todo)
+                            setIsDisabled(!todo.completed)
+                            handleToggleCompleted(todo.id)
+                        }} />
+                </span>
+                <input
+                    className="form-control "
+                    type="text"
+                    value={editedTitleTask}
+                    onChange={(e) => setEditedTitleTask(e.target.value)}
+                    disabled={!todo.editing}
+                    style={{ textDecoration: todo.editing ? 'none' : todo.completed ? 'line-through' : 'none' }}
+                />
+            </div>
+            <div className="input-group flex-grow-1 ">
+                <span className="input-group-text"><BsBodyText /></span>
                 {
-                    todo.editing ? "SAV" : "EDI"
+                    todo.editing
+                        ? (<textarea
+                            className="form-control "
+                            rows={5}
+                            value={editedBodyTask}
+                            onChange={(e) => setEditedBodyTask(e.target.value)}
+                            aria-label="With textarea"
+                            disabled={!todo.editing}
+                            style={{ textDecoration: todo.editing ? 'none' : todo.completed ? 'line-through' : 'none' }} />)
+                        : (<div className=" form-control text-left "
+
+                            style={{ backgroundColor: '#E9ECEF', textDecoration: todo.editing ? 'none' : todo.completed ? 'line-through' : 'none' }}>
+                            <ReactMarkdown>{editedBodyTask}</ReactMarkdown>
+                        </div>)
                 }
-            </button>
-            <button type="button" onClick={handleDelete}>DEL</button>
 
-            <Select
-                defaultValue={priorityOptions.find((opt) => opt.value === todo.priority)}
-                onChange={(option) => handleEditTask(todo.id, option.value, "priority")}
-                options={priorityOptions}
-            />
 
+
+
+            </div>
+            <div className="d-flex justify-content-between align-items-center">
+                <Select
+                    defaultValue={priorityOptions.find((opt) => opt.value === todo.priority)}
+                    onChange={(option) => {
+                        handleEdit(todo.id, option.value, "priority")
+                    }}
+                    options={priorityOptions}
+                    isSearchable={false}
+                    isDisabled={isDisabled}
+
+                /> <span data-bs-toggle="tooltip" title={`created : ${todo.date.toLocaleDateString()}`}  >{`last updated le : ${todo.lastUpdate.toLocaleDateString()}`}</span>
+                <div className="d-flex gap-1">
+                    <button className="btn btn-outline-warning" name="EditTask" type="button" onClick={handleEditTask}>
+                        {
+                            todo.editing ? <FaSave /> : <MdEdit />
+                        }
+                    </button>
+
+                    <button className="btn btn-outline-danger" type="button" onClick={handleDelete}><MdDelete /></button>
+
+                </div>
+
+
+            </div>
         </div >
     )
 
