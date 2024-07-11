@@ -9,53 +9,74 @@ import { Controller } from 'react-hook-form'
 
 
 
-const priorityOptions = [
-    { value: 'High', label: 'High' },
-    { value: 'Medium', label: 'Medium' },
-    { value: 'Low', label: 'Low' },
-];
 
 
-
+/**
+ * AddTaskForm component
+ *
+ * A React component that renders a form to add a new task.
+ *
+ * @param {function} onAddTask - Callback function to add a new task
+ * @param {function} onClose - Callback function to close the modal
+ *
+ */
 const AddTaskForm = ({ onAddTask, onClose }) => {
 
+    const priorityOptions = [
+        { value: 'High', label: 'High' },
+        { value: 'Medium', label: 'Medium' },
+        { value: 'Low', label: 'Low' },
+    ];
 
+    /**
+       * useForm hook to manage form state and validation
+       */
     const { register, handleSubmit, formState: { errors }, control } = useForm()
 
 
+    /**
+   * AddTask function to create a new task object and in todos array
+   *
+   * @param {object} data - Form data
+   */
     const AddTask = (data) => {
-        try {
-            const newTask = {
-                id: Date.now(),
-                date: new Date(),
-                lastUpdate: new Date(),
-                title: data.title,
-                body: data.body,
-                priority: data.priority,
-                completed: false,
-                editing: false,
-            };
-
-
-
-            onAddTask(newTask)
-            onClose()
-            console.log(`Tâche ajoutée :`)
-            console.table(newTask)
-
-        } catch (error) {
-            onClose()
-            console.error(`une erreur lors de l'ajout d'une tache : ${error.message}`)
-
-
+        const newTask = {
+            id: Date.now(),
+            date: new Date(),
+            lastUpdate: new Date(),
+            title: data.title,
+            body: data.body,
+            priority: data.priority,
+            completed: false,
+            editing: false,
         }
+        onAddTask(newTask)
+        onClose()
+        console.info(`Tâche ajoutée`)
+        console.table(newTask)
+
+
     }
 
+    /**
+   * onSubmit function to handle form submission
+   *
+   * @param {object} data - Form data
+   */
     const onSubmit = (data) => {
-        console.log(data)
-        AddTask(data);
+        try {
+            if (data.title === undefined || data.body === undefined || data.priority === undefined) {
+                throw new Error(`Failed to add task. Please try again.`)
+            }
+            AddTask(data);
+        } catch (error) {
+            console.error(`Error: ${error.message}`);
+            return;
+        } finally {
+            onClose()
+        }
 
-    };
+    }
 
 
 
@@ -66,9 +87,7 @@ const AddTaskForm = ({ onAddTask, onClose }) => {
                 <div className="modal-header">
                     <div className="modal-title">
                         <p className="h4"> Add a new task </p>
-                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+
                     </div>
 
                 </div>
@@ -103,24 +122,25 @@ const AddTaskForm = ({ onAddTask, onClose }) => {
                         />
 
                     </div>
-                    <Controller
-                        control={control}
-                        name="priority"
 
-                        defaultValue={priorityOptions[2].value}
-                        rules={{ required: { value: true, message: 'Priority is required' } }}
-                        render={({ field }) => (
-                            <Select
-                                defaultValue={priorityOptions[2]}
-                                options={priorityOptions}
-                                onChange={(({ value }) => field.onChange(value))}
-                                isSearchable={false}
-                            />
-                        )}
-                    />
+
                 </div>
 
-                <div className="modal-footer">
+                <div className="modal-footer mt-4 d-flex justify-content-around"><Controller
+                    control={control}
+                    name="priority"
+
+                    defaultValue={priorityOptions[2].value}
+                    rules={{ required: { value: true, message: 'Priority is required' } }}
+                    render={({ field }) => (
+                        <Select
+                            defaultValue={priorityOptions[2]}
+                            options={priorityOptions}
+                            onChange={(({ value }) => field.onChange(value))}
+                            isSearchable={false}
+                        />
+                    )}
+                />
                     <button type='submit' className='btn btn-outline-primary'>Add This Task</button>
                 </div>
 

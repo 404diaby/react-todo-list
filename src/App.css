@@ -6,15 +6,22 @@
   padding: 0;
   display: flex;
   justify-content: center;
-  
-  height: 100vh;
-  font-family: 'Poppins', sans-serif;margin-top: 5em;
+  min-width: 375px;
+  height: 100dvh;
+  /* unit to modile viewport
+  svh
+  lvw
+  dvh
+   */
+   
+  font-family: 'Poppins', sans-serif !important; 
+  margin-top: 5em;
  }
  
 
  
 
- .modal {
+ .my-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -27,13 +34,13 @@
   text-align: initial;
 }
 
-.modal-content {
+.my-modal-content {
   background-color: #fff;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 10px;
   width: 80%;
-}
+} 
 
 .close {
   position: absolute;
@@ -43,12 +50,27 @@
   cursor: pointer;
 } 
 
-.dark-mode {
-  background-color: #333;
-  color: #fff;
+.todo-list {
+  display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+   margin: auto;
+   background-color: #ECEDF6;
+    
 }
 
-.dark-mode.todo-list {
-  background-color: #444;
-  border-color: #555;
+
+@media (max-width: 768px) {
+  .todo-list {
+      grid-template-columns: repeat(auto-fill, minmax(350px, 600px));
+      gap: 16px;
+  }
+}
+
+/* Style pour les petits écrans */
+@media (max-width: 480px) {
+  .todo-list {
+      grid-template-columns: 1fr; /* Une seule colonne pour les très petits écrans */
+      gap: 16px;
+  }
 }

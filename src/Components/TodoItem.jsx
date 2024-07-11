@@ -95,7 +95,7 @@ const TodoItem = ({ todo, handleDeleteTask, handleToggleCompleted, handleEdit })
         <div key={todo.id} className={todo.editing ?
             "  todo-item  p-2   rounded bg-light border border-3 border-warning d-flex flex-column gap-3" : "d-flex flex-column gap-2 todo-item  p-2   rounded bg-light"
 
-        } style={{ width: '500px', minHeight: '300px' }} >
+        } style={{/*  width: '500px', minHeight: '300px' */ }} >
             <div className="input-group">
                 <span className="input-group-text">
                     < input
@@ -150,7 +150,7 @@ const TodoItem = ({ todo, handleDeleteTask, handleToggleCompleted, handleEdit })
                     isSearchable={false}
                     isDisabled={isDisabled}
 
-                /> <span data-bs-toggle="tooltip" title={`created : ${todo.date.toLocaleDateString()}`}  >{`last updated le : ${todo.lastUpdate.toLocaleDateString()}`}</span>
+                /> <span data-bs-toggle="tooltip" title={`created : ${new Date(todo.date).toLocaleDateString()}`}  >{`last updated le : ${new Date(todo.lastUpdate).toLocaleDateString()}`}</span>
                 <div className="d-flex gap-1">
                     <button className="btn btn-outline-warning" name="EditTask" type="button" onClick={handleEditTask}>
                         {
